@@ -10,7 +10,6 @@ import { useObservable } from "@lib/api/storage";
 import { ActionSheet, BottomSheetTitleHeader, Button, TableRadioGroup, TableRadioRow, TableRowIcon } from "@metro/common/components";
 import { View } from "react-native";
 
-
 export default function Themes() {
     BunnySettings.useSettings();
     useObservable([ColorManager.infos, ColorManager.preferences]);
@@ -53,8 +52,8 @@ export default function Themes() {
                             title="Override Theme Type"
                             value={ColorManager.preferences.type ?? "auto"}
                             hasIcons={true}
-                            onChange={(type: "auto" | "dark" | "light") => {
-                                ColorManager.preferences.type = type !== "auto" ? type : undefined;
+                            onChange={type => {
+                                ColorManager.preferences.type = type !== "auto" ? type as "dark" | "light" : undefined;
                                 updateBunnyColor(ColorManager.getCurrentManifest(), { update: true });
                             }}
                         >
@@ -66,8 +65,8 @@ export default function Themes() {
                             title="Chat Background"
                             value={ColorManager.preferences.customBackground ?? "shown"}
                             hasIcons={true}
-                            onChange={(type: "shown" | "hidden") => {
-                                ColorManager.preferences.customBackground = type !== "shown" ? type : null;
+                            onChange={type => {
+                                ColorManager.preferences.customBackground = type !== "shown" ? type as "hidden" : null;
                             }}
                         >
                             <TableRadioRow icon={<TableRowIcon source={findAssetId("ImageIcon")} />} label="Show" value={"shown"} />

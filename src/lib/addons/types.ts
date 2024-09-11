@@ -1,4 +1,4 @@
-export type Author = { name: string, id: `${bigint}` };
+export type Author = { name: string, id?: `${bigint}` };
 
 export interface BunnyManifest {
     id: string;

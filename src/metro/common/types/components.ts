@@ -1,6 +1,7 @@
 import { Nullish } from "@lib/utils/types";
 import { TextStyles, ThemeColors } from "@ui/types";
-import { MutableRefObject, ReactNode, RefObject } from "react";
+import { Falsey } from "lodash";
+import { FC, MutableRefObject, PropsWithoutRef, ReactNode, RefObject } from "react";
 import type * as RN from "react-native";
 import { ImageSourcePropType, PressableProps } from "react-native";
 import { SharedValue } from "react-native-reanimated";
@@ -28,6 +29,12 @@ interface ButtonProps {
 }
 
 export type Button = React.ForwardRefExoticComponent<ButtonProps>;
+
+interface TwinButtonsProps {
+    children: ReactNode
+}
+
+export type TwinButtons = React.ComponentType<TwinButtonsProps>;
 
 // Segmented Control
 interface SegmentedControlItem {
@@ -163,3 +170,69 @@ interface IconButtonProps {
 }
 
 export type IconButton = React.FC<IconButtonProps>;
+
+export type PressableScale = React.FC<PropsWithoutRef<typeof RN.Pressable>>;
+
+interface TableRowBaseProps {
+    arrow?: boolean;
+    label: string | ReactNode;
+    subLabel?: string | ReactNode;
+    icon?: ImageSourcePropType | JSX.Element | Falsey;
+    trailing?: ReactNode | React.ComponentType<any>;
+}
+
+interface TableRowProps extends TableRowBaseProps {
+    onPress?: () => void;
+}
+
+export type TableRow = React.FC<TableRowProps> & {
+    Icon: TableRowIcon;
+    TrailingText: TableRowTrailingText;
+    Arrow: FC<{}>;
+};
+
+interface TableRowTrailingTextProps {
+    text: string;
+}
+
+export type TableRowTrailingText = FC<TableRowTrailingTextProps>;
+
+interface TableRowIconProps {
+    style?: RN.ImageStyle;
+    variant?: LiteralUnion<"danger", string>,
+    source: ImageSourcePropType | undefined;
+}
+
+export type TableRowIcon = React.FC<TableRowIconProps>;
+
+interface TableRowGroupProps {
+    title: string;
+    children: ReactNode;
+}
+
+export type TableRowGroup = React.FC<TableRowGroupProps>;
+
+interface TableRadioGroupProps {
+    title: string;
+    value: string;
+    hasIcons?: boolean;
+    onChange: <T extends string>(type: T) => void;
+    children: ReactNode;
+}
+
+export type TableRadioGroup = FC<TableRadioGroupProps>;
+
+interface TableRadioRowProps {
+    icon: JSX.Element;
+    label: string;
+    value: string;
+}
+
+export type TableRadioRow = FC<TableRadioRowProps>;
+
+interface TableSwitchRowProps extends TableRowBaseProps {
+    value: boolean;
+    onValueChange: (value: boolean) => void;
+}
+
+export type TableSwitchRow = FC<TableSwitchRowProps>;

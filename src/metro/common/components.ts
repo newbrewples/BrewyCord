@@ -27,20 +27,21 @@ export const ActionSheetRow = findProp("ActionSheetRow");
 
 // Buttons
 export const Button = findSingular("Button") as t.Button;
-export const TwinButtons = findProp("TwinButtons");
+export const TwinButtons = findProp("TwinButtons") as t.TwinButtons;
 export const IconButton = findSingular("IconButton") as t.IconButton;
 export const RowButton = findProp("RowButton") as t.RowButton;
 
 export const PressableScale = findProp("PressableScale");
 
 // Tables
-export const TableRow = findProp("TableRow");
-export const TableRowIcon = findProp("TableRowIcon");
-export const TableRowTrailingText = findProp("TableRowTrailingText");
-export const TableRowGroup = findProp("TableRowGroup");
-export const TableRadioGroup = findProp("TableRadioGroup");
-export const TableRadioRow = findProp("TableRadioRow");
-export const TableSwitchRow = findProp("TableSwitchRow");
+export const TableRow = findProp("TableRow") as t.TableRow;
+export const TableRowIcon = findProp("TableRowIcon") as t.TableRowIcon;
+export const TableRowTrailingText = findProp("TableRowTrailingText") as t.TableRowTrailingText;
+export const TableRowGroup = findProp("TableRowGroup") as t.TableRowGroup;
+export const TableRadioGroup = findProp("TableRadioGroup") as t.TableRadioGroup;
+export const TableRadioRow = findProp("TableRadioRow") as t.TableRadioRow;
+export const TableSwitchRow = findProp("TableSwitchRow") as t.TableSwitchRow;
+
 export const TableSwitch = findSingular("FormSwitch");
 export const TableRadio = findSingular("FormRadio");
 export const TableCheckbox = findSingular("FormCheckbox");
