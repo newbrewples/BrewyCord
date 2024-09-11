@@ -29,7 +29,7 @@ export default {
 
     updateStage(id: string, stage: PluginStage) {
         this.stages[id] = stage;
-        if (stage === PluginStage.STARTED && this.errors[id]) {
+        if (stage === PluginStage.RUNNING && this.errors[id]) {
             delete this.errors[id];
         }
     },

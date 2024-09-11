@@ -12,7 +12,7 @@ export default function usePluginStatusColor(id: string) {
     const stage = PluginReporter.stages[id];
     const disableReason = PluginReporter.disableReason[id];
 
-    if (stage === PluginStage.STARTED) {
+    if (stage === PluginStage.RUNNING) {
         return positiveBg;
     }
 

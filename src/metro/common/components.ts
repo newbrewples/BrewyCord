@@ -12,7 +12,7 @@ const bySingularProp = createFilterDefinition<[string]>(
 );
 
 const findSingular = (prop: string) => proxyLazy(() => findExports(bySingularProp(prop))?.[prop]);
-const findProp = (prop: string) => proxyLazy(() => findByProps(prop)[prop]);
+const findProp = (...props: string[]) => proxyLazy(() => findByProps(...props)[props[0]]);
 
 // Discord
 export const LegacyAlert = findByDisplayNameLazy("FluxContainer(Alert)");
@@ -54,11 +54,18 @@ export const FormCheckbox = findSingular("FormCheckbox");
 export const Card = findProp("Card");
 export const RedesignCompat = proxyLazy(() => findByProps("RedesignCompat").RedesignCompat);
 
+// Alert
+export const AlertModal = findProp("AlertModal");
+export const AlertActionButton = findProp("AlertActionButton");
+export const AlertActions = findProp("AlertActions");
+
 // Pile
 export const AvatarPile = findSingular("AvatarPile");
 
 // Misc.
 export const Stack = findProp("Stack") as t.Stack;
+export const Avatar = findProp("default", "AvatarSizes", "getStatusSize");
+
 
 // Inputs
 export const TextInput = findSingular("TextInput") as t.TextInput;

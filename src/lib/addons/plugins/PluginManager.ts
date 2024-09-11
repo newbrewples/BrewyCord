@@ -313,7 +313,7 @@ export default {
             PluginReporter.updateStage(id, PluginStage.STARTING);
             const promise = pluginInstance.start?.();
             if (awaitPlugin) await promise;
-            PluginReporter.updateStage(id, PluginStage.STARTED);
+            PluginReporter.updateStage(id, PluginStage.RUNNING);
         } catch (error) {
             PluginReporter.reportPluginError(id, error);
 

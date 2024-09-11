@@ -1,5 +1,5 @@
 import { downloadFile, fileExists, removeFile, writeFile } from "@lib/api/native/fs";
-import { awaitStorage, createStorage, migrateToNewStorage, preloadStorageIfExists, updateStorageAsync } from "@lib/api/storage";
+import { awaitStorage, createStorage, migrateToNewStorage, preloadStorageIfExists, updateStorageAsync, useObservable } from "@lib/api/storage";
 import { safeFetch } from "@lib/utils";
 import isValidHttpUrl from "@lib/utils/isValidHttpUrl";
 import { omit } from "es-toolkit";
@@ -49,6 +49,10 @@ export default {
 
     getAllIds() {
         return Object.keys(this.traces);
+    },
+
+    useFonts() {
+        useObservable([this.preferences, this.traces]);
     },
 
     convertToNewFormat(font: OldFontDefinition, id: string): FontManifest {

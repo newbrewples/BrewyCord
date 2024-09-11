@@ -2,7 +2,7 @@ import BunnySettings from "@core/storage/BunnySettings";
 import { BunnyPluginManifest } from "@lib/addons/plugins/types";
 import { fileExists, removeFile, writeFile } from "@lib/api/native/fs";
 import { LOADER_IDENTITY } from "@lib/api/native/loader";
-import { awaitStorage, createStorage, createStorageAsync, migrateToNewStorage, preloadStorageIfExists, updateStorageAsync } from "@lib/api/storage";
+import { awaitStorage, createStorage, createStorageAsync, migrateToNewStorage, preloadStorageIfExists, updateStorageAsync, useObservable } from "@lib/api/storage";
 import { invariant } from "@lib/utils";
 import safeFetch from "@lib/utils/safeFetch";
 import chroma from "chroma-js";
@@ -79,6 +79,10 @@ export default {
                 };
             }
         });
+    },
+
+    useColors() {
+        useObservable([this.preferences, this.infos]);
     },
 
     sanitizeId(id: string) {

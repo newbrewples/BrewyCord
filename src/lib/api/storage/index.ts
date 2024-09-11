@@ -8,7 +8,7 @@ import { debounce } from "es-toolkit";
 const storageInitErrorSymbol = Symbol.for("bunny.storage.initError");
 const storagePromiseSymbol = Symbol.for("bunny.storage.promise");
 
-const _loadedPath = {} as Record<string, any>;
+const _loadedStorage = {} as Record<string, any>;
 
 function createFileBackend<T extends object>(filePath: string) {
     return {
@@ -88,7 +88,7 @@ export function useObservable(observables: Observable[], opts?: ObserverOptions)
 }
 
 export async function updateStorageAsync<T extends object = {}>(path: string, value: T): Promise<void> {
-    _loadedPath[path] = value;
+    _loadedStorage[path] = value;
     await createFileBackend<T>(path).set(value);
 }
 
@@ -132,20 +132,20 @@ export function createStorageAndCallback<T extends object = {}>(
     };
 
     const backend = createFileBackend<T>(path);
-    if (_loadedPath[path]) {
-        callback(_loadedPath[path]);
+    if (_loadedStorage[path]) {
+        callback(_loadedStorage[path]);
     } else {
         backend.exists().then(async exists => {
             if (!exists) {
                 if (nullIfEmpty) {
-                    callback(_loadedPath[path] = null);
+                    callback(_loadedStorage[path] = null);
                 } else {
-                    _loadedPath[path] = dflt;
+                    _loadedStorage[path] = dflt;
                     await backend.set(dflt);
                     callback(dflt);
                 }
             } else {
-                callback(_loadedPath[path] = await backend.get());
+                callback(_loadedStorage[path] = await backend.get());
             }
         });
     }
@@ -195,11 +195,11 @@ export const createStorage = <T extends object = {}>(
 };
 
 export async function preloadStorageIfExists(path: string): Promise<boolean> {
-    if (_loadedPath[path]) return true;
+    if (_loadedStorage[path]) return true;
 
     const backend = createFileBackend(path);
     if (await backend.exists()) {
-        _loadedPath[path] = await backend.get();
+        _loadedStorage[path] = await backend.get();
         return false;
     }
 
@@ -208,7 +208,7 @@ export async function preloadStorageIfExists(path: string): Promise<boolean> {
 
 export async function purgeStorage(path: string) {
     await removeFile(path);
-    delete _loadedPath[path];
+    delete _loadedStorage[path];
 }
 
 export function awaitStorage(...proxies: any[]) {

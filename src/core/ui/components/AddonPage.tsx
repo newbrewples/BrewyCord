@@ -1,12 +1,13 @@
 import BunnySettings from "@core/storage/BunnySettings";
 import { CardWrapper } from "@core/ui/components/AddonCard";
 import { findAssetId } from "@lib/api/assets";
+import { dismissAlert, openAlert } from "@lib/ui/alerts";
 import { showSheet } from "@lib/ui/sheets";
 import isValidHttpUrl from "@lib/utils/isValidHttpUrl";
 import { lazyDestructure } from "@lib/utils/lazy";
 import { findByProps } from "@metro";
 import { clipboard, NavigationNative } from "@metro/common";
-import { Button, FlashList, FloatingActionButton, HelpMessage, IconButton, Stack, Text, TextInput } from "@metro/common/components";
+import { AlertActionButton, AlertModal, Button, FlashList, FloatingActionButton, HelpMessage, IconButton, Stack, Text, TextInput } from "@metro/common/components";
 import { ErrorBoundary, Search } from "@ui/components";
 import { isNotNil } from "es-toolkit";
 import fuzzysort from "fuzzysort";
@@ -14,8 +15,6 @@ import { ComponentType, ReactNode, useCallback, useEffect, useMemo } from "react
 import { Image, ScrollView, View } from "react-native";
 
 const { showSimpleActionSheet, hideActionSheet } = lazyDestructure(() => findByProps("showSimpleActionSheet"));
-const { openAlert, dismissAlert } = lazyDestructure(() => findByProps("openAlert", "dismissAlert"));
-const { AlertModal, AlertActionButton } = lazyDestructure(() => findByProps("AlertModal", "AlertActions"));
 
 type SearchKeywords<T> = Array<string | ((obj: T & {}) => string)>;
 

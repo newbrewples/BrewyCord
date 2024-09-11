@@ -1,4 +1,5 @@
 import { CardWrapper } from "@core/ui/components/AddonCard";
+import { UnifiedPluginModel } from "@core/ui/settings/pages/Plugins/models/UnifiedPluginModel";
 import { usePluginCardStyles } from "@core/ui/settings/pages/Plugins/usePluginCardStyles";
 import usePluginStatusColor from "@core/ui/settings/pages/Plugins/usePluginStatusColor";
 import { findAssetId } from "@lib/api/assets";
@@ -8,8 +9,6 @@ import { showSheet } from "@ui/sheets";
 import chroma from "chroma-js";
 import { createContext, useContext, useMemo } from "react";
 import { Image, View } from "react-native";
-
-import { UnifiedPluginModel } from "..";
 
 const CardContext = createContext<{ plugin: UnifiedPluginModel, result: Fuzzysort.KeysResult<UnifiedPluginModel> }>(null!);
 const useCardContext = () => useContext(CardContext);

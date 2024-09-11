@@ -177,7 +177,8 @@ interface TableRowBaseProps {
     arrow?: boolean;
     label: string | ReactNode;
     subLabel?: string | ReactNode;
-    icon?: ImageSourcePropType | JSX.Element | Falsey;
+    icon?: JSX.Element | Falsey;
+    disabled?: boolean;
     trailing?: ReactNode | React.ComponentType<any>;
 }
 

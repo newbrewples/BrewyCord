@@ -1,7 +1,7 @@
 import PluginManager from "@lib/addons/plugins/PluginManager";
 import { BunnyPluginManifest } from "@lib/addons/plugins/types";
 
-import { UnifiedPluginModel } from "..";
+import { UnifiedPluginModel } from "./UnifiedPluginModel";
 
 export default function unifyVdPlugin(manifest: BunnyPluginManifest): UnifiedPluginModel {
     return {
@@ -17,12 +17,12 @@ export default function unifyVdPlugin(manifest: BunnyPluginManifest): UnifiedPlu
             PluginManager.usePlugin(manifest.id);
         },
         toggle(start: boolean) {
-            start
+            return start
                 ? PluginManager.enable(manifest.id)
                 : PluginManager.disable(manifest.id);
         },
         resolveSheetComponent() {
-            return import("../sheets/VdPluginInfoActionSheet");
+            return import("../sheets/PluginInfoActionSheet");
         },
         getPluginSettingsComponent() {
             return PluginManager.getSettingsComponent(manifest.id);

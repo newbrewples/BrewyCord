@@ -1,4 +1,4 @@
-import { readFile, writeFile } from "@lib/api/native/fs";
+import { fileExists, readFile, writeFile } from "@lib/api/native/fs";
 import { RTNClientInfoManager } from "@lib/api/native/rn-modules";
 import { debounce } from "es-toolkit";
 
@@ -39,8 +39,8 @@ function buildInitCache() {
 
 /** @internal */
 export async function initMetroCache() {
+    if (!await fileExists(BUNNY_METRO_CACHE_KEY)) return void buildInitCache();
     const rawCache = await readFile(BUNNY_METRO_CACHE_KEY);
-    if (rawCache == null) return void buildInitCache();
 
     try {
         _metroCache = JSON.parse(rawCache);

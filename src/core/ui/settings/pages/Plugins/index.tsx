@@ -8,33 +8,15 @@ import { Author } from "@lib/addons/types";
 import { findAssetId } from "@lib/api/assets";
 import { useObservable } from "@lib/api/storage";
 import { BUNNY_PROXY_PREFIX, VD_PROXY_PREFIX } from "@lib/constants";
+import { openAlert } from "@lib/ui/alerts";
 import { showToast } from "@lib/ui/toasts";
-import { lazyDestructure } from "@lib/utils/lazy";
-import { findByProps } from "@metro";
 import { NavigationNative } from "@metro/common";
-import { Button, Card, FlashList, Text, TwinButtons } from "@metro/common/components";
+import { AlertActionButton, AlertActions, AlertModal, Button, Card, FlashList, Text, TwinButtons } from "@metro/common/components";
 import { ComponentProps, useState } from "react";
 import { View } from "react-native";
 
+import { UnifiedPluginModel } from "./models/UnifiedPluginModel";
 import unifyVdPlugin from "./models/vendetta";
-
-export interface UnifiedPluginModel {
-    id: string;
-    name: string;
-    description?: string;
-    authors?: Array<Author | string>;
-    icon?: string;
-
-    isEnabled(): boolean;
-    usePluginState(): void;
-    isInstalled(): boolean;
-    toggle(start: boolean): void;
-    resolveSheetComponent(): Promise<{ default: React.ComponentType<any>; }>;
-    getPluginSettingsComponent(): React.ComponentType<any> | null | undefined;
-}
-
-const { openAlert } = lazyDestructure(() => findByProps("openAlert", "dismissAlert"));
-const { AlertModal, AlertActions, AlertActionButton } = lazyDestructure(() => findByProps("AlertModal", "AlertActions"));
 
 interface PluginPageProps extends Partial<ComponentProps<typeof AddonPage<UnifiedPluginModel>>> {
     useItems: () => unknown[];
@@ -72,7 +54,8 @@ export default function Plugins() {
             return PluginManager.getAllIds().map(id => PluginManager.getManifest(id));
         }}
         resolveItem={unifyVdPlugin}
-        ListHeaderComponent={() => <HeaderComponent />}
+        ListHeaderComponent={HeaderComponent}
+        ListFooterComponent={FooterComponent}
         installAction={{
             label: "Install a plugin",
             fetchFn: async (url: string) => {
@@ -104,6 +87,15 @@ export default function Plugins() {
         }}
     />;
 }
+
+function FooterComponent() {
+    return <View style={{ flexDirection: "row", justifyContent: "center", paddingVertical: 8 }}>
+        <Text variant="text-sm/semibold">
+            {PluginManager.getAllIds().length} installed
+        </Text>
+    </View>;
+}
+
 function HeaderComponent() {
     const [dismissUnproxied, setDismissUnproxied] = useState(false);
     const navigation = NavigationNative.useNavigation();
