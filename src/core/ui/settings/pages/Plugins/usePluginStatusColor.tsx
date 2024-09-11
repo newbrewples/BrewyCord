@@ -1,11 +1,6 @@
 import { PluginDisableReason, PluginStage } from "@core/reporter/enums";
 import PluginReporter from "@core/reporter/PluginReporter";
-import { lazyDestructure } from "@lib/utils/lazy";
-import { findByProps } from "@metro";
-import { tokens } from "@metro/common";
-
-// TODO: export in common
-const { useToken } = lazyDestructure(() => findByProps("useToken"));
+import { tokens, useToken } from "@metro/common";
 
 export default function usePluginStatusColor(id: string) {
     PluginReporter.useReporter();

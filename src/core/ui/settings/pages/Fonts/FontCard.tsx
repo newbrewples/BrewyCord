@@ -6,9 +6,7 @@ import { FontManifest } from "@lib/addons/fonts/types";
 import { findAssetId } from "@lib/api/assets";
 import { RTNBundleUpdaterManager } from "@lib/api/native/rn-modules";
 import { useObservable } from "@lib/api/storage";
-import { lazyDestructure } from "@lib/utils/lazy";
-import { findByProps } from "@metro";
-import { NavigationNative, tokens } from "@metro/common";
+import { NavigationNative, tokens, useToken } from "@metro/common";
 import { Button, Card, IconButton, Stack, Text } from "@metro/common/components";
 import * as Skia from "@shopify/react-native-skia";
 import { TextStyleSheet } from "@ui/styles";
@@ -16,8 +14,6 @@ import { useMemo } from "react";
 import { View } from "react-native";
 
 import FontEditor from "./FontEditor";
-
-const { useToken } = lazyDestructure(() => findByProps("useToken"));
 
 function FontPreview({ font }: { font: FontManifest; }) {
     const TEXT_NORMAL = useToken(tokens.colors.TEXT_NORMAL);
@@ -74,10 +70,6 @@ export default function FontCard({ item: font }: CardWrapper<FontManifest>) {
                         <Text variant="heading-lg/semibold">
                             {font.display.name}
                         </Text>
-                        {/* TODO: Text wrapping doesn't work well */}
-                        {/* <Text color="text-muted" variant="text-sm/semibold">
-                            {font.description}
-                        </Text> */}
                     </View>
                     <View style={{ marginLeft: "auto" }}>
                         <Stack spacing={12} direction="horizontal">

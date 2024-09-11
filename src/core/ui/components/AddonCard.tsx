@@ -3,13 +3,12 @@ import { lazyDestructure } from "@lib/utils/lazy";
 import { tokens } from "@metro/common";
 import { Card, FormRadio, FormSwitch, IconButton, LegacyFormRow, Stack, Text } from "@metro/common/components";
 import { findByProps } from "@metro/wrappers";
-import { createStyles, TextStyleSheet } from "@ui/styles";
+import { createStyles } from "@ui/styles";
 import { TouchableOpacity, View } from "react-native";
 
 const { hideActionSheet } = lazyDestructure(() => findByProps("openLazy", "hideActionSheet"));
 const { showSimpleActionSheet } = lazyDestructure(() => findByProps("showSimpleActionSheet"));
 
-// TODO: These styles work weirdly. iOS has cramped text, Android with low DPI probably does too. Fix?
 const useStyles = createStyles({
     card: {
         backgroundColor: tokens.colors.CARD_SECONDARY_BG,
@@ -22,25 +21,12 @@ const useStyles = createStyles({
     headerLeading: {
         flexDirection: "column",
         justifyContent: "center",
-        scale: 1.2
     },
     headerTrailing: {
         display: "flex",
         flexDirection: "row",
         gap: 15,
         alignItems: "center"
-    },
-    headerLabel: {
-        ...TextStyleSheet["heading-md/semibold"],
-        color: tokens.colors.TEXT_NORMAL,
-    },
-    headerSubtitle: {
-        ...TextStyleSheet["text-md/semibold"],
-        color: tokens.colors.TEXT_MUTED,
-    },
-    descriptionLabel: {
-        ...TextStyleSheet["text-md/semibold"],
-        color: tokens.colors.TEXT_NORMAL,
     },
     actions: {
         flexDirection: "row-reverse",
@@ -96,9 +82,9 @@ export default function AddonCard(props: CardProps) {
             <Stack spacing={16}>
                 <View style={{ flexDirection: "row", alignItems: "center" }}>
                     <View style={styles.headerLeading}>
-                        <Text style={styles.headerLabel}>{props.headerLabel}</Text>
+                        <Text variant="text-md/semibold">{props.headerLabel}</Text>
                         {props.headerSublabel && (
-                            <Text style={styles.headerSubtitle}>{props.headerSublabel}</Text>
+                            <Text variant="text-md/semibold" color="text-muted">{props.headerSublabel}</Text>
                         )}
                     </View>
                     <View style={[styles.headerTrailing, { marginLeft: "auto" }]}>

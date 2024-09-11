@@ -1,4 +1,5 @@
-import { RTNClientInfoManager, RTNMMKVManager } from "@lib/api/native/rn-modules";
+import { readFile, writeFile } from "@lib/api/native/fs";
+import { RTNClientInfoManager } from "@lib/api/native/rn-modules";
 import { debounce } from "es-toolkit";
 
 import { ModuleFlags, ModulesMapInternal } from "./enums";
@@ -36,10 +37,9 @@ function buildInitCache() {
     return cache;
 }
 
-// TODO: Store in file system... is a better idea?
 /** @internal */
 export async function initMetroCache() {
-    const rawCache = await RTNMMKVManager.getItem(BUNNY_METRO_CACHE_KEY);
+    const rawCache = await readFile(BUNNY_METRO_CACHE_KEY);
     if (rawCache == null) return void buildInitCache();
 
     try {
@@ -62,7 +62,7 @@ export async function initMetroCache() {
 }
 
 const saveCache = debounce(() => {
-    RTNMMKVManager.setItem(BUNNY_METRO_CACHE_KEY, JSON.stringify(_metroCache));
+    writeFile(BUNNY_METRO_CACHE_KEY, JSON.stringify(_metroCache));
 }, 1000);
 
 function extractExportsFlags(moduleExports: any) {

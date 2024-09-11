@@ -191,7 +191,6 @@ export default {
     },
 
     async updateAll(): Promise<void> {
-        // TODO: Parallelly fetch
         for (const id in this.traces) {
             const { sourceUrl, lastEdited } = this.traces[id];
             if (!sourceUrl || lastEdited) continue;

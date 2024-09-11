@@ -6,15 +6,22 @@ import { findByProps } from "@metro/wrappers";
 
 const { uuid4 } = lazyDestructure(() => findByProps("uuid4"));
 
-export const showToast = (content: string, asset?: number) => toasts.open({
-    // ? In build 182205/44707, Discord changed their toasts, source is no longer used, rather icon, and a key is needed.
-    // TODO: We could probably have the developer specify a key themselves, but this works to fix toasts
-    key: `vd-toast-${uuid4()}`,
-    content: content,
-    source: asset,
-    icon: asset,
-});
+export function showToast(content: string, icon?: number): void;
+export function showToast(props: { content: string, icon?: number, key?: string }): void
+export function showToast(contentOrProps: string | { content: string, icon?: number, key?: string }, icon?: number) {
+    if (typeof contentOrProps === "string") {
+        toasts.open({
+            key: `bn-toast-${uuid4()}`,
+            content: contentOrProps,
+            source: icon,
+            icon
+        });
+    } else {
+        contentOrProps.key ??= `bn-toast-${uuid4()}`;
+        toasts.open({ ...contentOrProps, source: contentOrProps.icon });
+    }
+}
 
-showToast.showCopyToClipboard = (message = Strings.COPIED_TO_CLIPBOARD) => {
-    showToast(message, findAssetId("toast_copy_link"));
+showToast.showCopyToClipboard = (content = Strings.COPIED_TO_CLIPBOARD) => {
+    showToast({ content, icon: findAssetId("CopyIcon") });
 };

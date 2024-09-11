@@ -36,8 +36,7 @@ function createPluginsObject() {
                     manifest: PluginManager.convertToVd(PluginManager.getManifest(id)),
                     get enabled() { return PluginManager.settings[id].enabled; },
                     get update() { return PluginManager.settings[id].autoUpdate; },
-                    // TODO: can something be done about this?
-                    get js() { return "()=>{}"; },
+                    get js() { return "()=>{}"; }, // There's no way to get this synchronously anymore (lazy-loaded)
                 }
             }), {}),
         () => PluginManager.getAllIds().length
