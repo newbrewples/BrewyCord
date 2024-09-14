@@ -3,16 +3,17 @@ import PluginReporter from "@core/reporter/PluginReporter";
 import { UnifiedPluginModel } from "@core/ui/settings/pages/Plugins/models/UnifiedPluginModel";
 import { showConfirmationAlert } from "@core/vendetta/ui/alerts";
 import PluginManager from "@lib/addons/plugins/PluginManager";
+import { BunnyPluginManifest, OptionDefinition } from "@lib/addons/plugins/types";
 import { findAssetId } from "@lib/api/assets";
 import { purgeStorage } from "@lib/api/storage";
 import { Codeblock } from "@lib/ui/components";
 import { lazyDestructure } from "@lib/utils/lazy";
 import { findByProps } from "@metro";
 import { clipboard } from "@metro/common";
-import { ActionSheet, Button, Card, Stack, TableRow, TableRowGroup, TableSwitch, Text } from "@metro/common/components";
+import { ActionSheet, Button, Card, Stack, TableCheckboxRow, TableRadioGroup, TableRadioRow, TableRow, TableRowGroup, TableSwitch, TableSwitchRow, Text, TextArea, TextInput } from "@metro/common/components";
 import { hideSheet } from "@ui/sheets";
 import { showToast } from "@ui/toasts";
-import { useReducer } from "react";
+import { useReducer, useState } from "react";
 import { View } from "react-native";
 
 import { TitleComponent } from "./TitleComponent";
@@ -20,11 +21,162 @@ import { PluginInfoActionSheetProps } from "./types";
 
 const { ScrollView } = lazyDestructure(() => findByProps("NativeViewGestureHandler"));
 
+const TEMP_OPT: BunnyPluginManifest["options"] & {} = {
+    duh: {
+        type: "string",
+        label: "Duh.",
+        description: "Do the actual duh that duhing the duh.",
+        icon: "CopyIcon",
+        placeholder: "nhh"
+    },
+    dah: {
+        type: "boolean",
+        label: "Dah.",
+        description: "The beauty of the dah-wn",
+        icon: "DownloadIcon"
+    },
+    deh: {
+        type: "select",
+        label: "Deh.",
+        description: "Do that lah, deh!",
+        options: [
+            {
+                label: "kldsjkldf",
+                description: "kldjklfd, skdjfl, sjkdlf!",
+                value: 9
+            },
+            {
+                label: "kldnjhjkhsjkldf",
+                description: "dlkjf, sdkfsd, kjfasif~",
+                value: 99
+            }
+        ]
+    },
+    dih: {
+        type: "radio",
+        label: "Dih",
+        description: "Wutchu dih dih ting?",
+        options: [
+            {
+                label: "Duhdshf",
+                description: "Djfdkfifoe kdfof dsi d & dkkjlsdaf!",
+                value: 0
+            },
+            {
+                label: "KJfjk",
+                description: "JKjkjfdljklfdkjlfd kjlfd jkldffjkl d.",
+                value: 1
+            }
+        ]
+    }
+};
+
+function OptionDefRow({ opt }: { opt: OptionDefinition }) {
+    const [current, setCurrent] = useState<string | undefined>();
+
+    switch (opt.type) {
+        case "string":
+            const Input = opt.textArea === true ? TextArea : TextInput;
+            const isValid = () => opt.regexValidation ? current?.match(opt.regexValidation) : true;
+
+            return <TableRow
+                label={<Input
+                    size="sm" // TextInput specific, but it's fine
+                    label={opt.label}
+                    placeholder={opt.placeholder}
+                    value={current}
+                    onChange={(v: string) => setCurrent(v)}
+                    state={isValid() ? "error" : undefined}
+                    errorMessage={isValid() ? undefined : "Invalid input"}
+                />}
+                subLabel={opt.description}
+                icon={getIcon(opt.icon)}
+            />;
+        case "boolean":
+            return <TableSwitchRow
+                label={opt.label}
+                subLabel={opt.description}
+                icon={getIcon(opt.icon)}
+                value={current === "true"}
+                onValueChange={() => {
+                    // Absolute horror
+                    setCurrent(v => String(String(v) !== "true"));
+                }}
+            />;
+        case "select":
+            return <Card start={false} end={false} variant="secondary">
+                <TableRowGroup title={opt.label}>
+                    {opt.options.map(def => {
+                        return <TableCheckboxRow
+                            label={def.label}
+                            subLabel={def.description}
+                            icon={getIcon(def.icon)}
+                            checked={def.value === current}
+                            onPress={() => {}}
+                        />;
+                    })}
+                </TableRowGroup>
+                <Text style={{ marginTop: 8 }} color="text-secondary" variant="text-sm/normal">
+                    {opt.description}
+                </Text>
+            </Card>;
+        case "radio":
+            return <Card start={false} end={false} variant="secondary">
+                <TableRadioGroup title={opt.label} value={String(opt.options[0].value)} onChange={() => {}}>
+                    {opt.options.map(def => {
+                        return <TableRadioRow
+                            label={def.label}
+                            subLabel={def.description}
+                            icon={getIcon(def.icon)}
+                            value={String(def.value)}
+                        />;
+                    })}
+                </TableRadioGroup>
+                <Text style={{ marginTop: 8 }} color="text-secondary" variant="text-sm/normal">
+                    {opt.description}
+                </Text>
+            </Card>;
+        case "slider":
+    }
+}
+
+function getIcon(icon: OptionDefinition["icon"]) {
+    if (!icon) return;
+
+    return <TableRow.Icon
+        source={typeof icon === "string" ? findAssetId(icon) : icon}
+    />;
+}
+
+function OptionSection({ plugin, navigation }: { plugin: UnifiedPluginModel, navigation: any }) {
+    const manifest = PluginManager.getManifest(plugin.id);
+    const SettingsComponent = plugin.getPluginSettingsComponent();
+
+    return <TableRowGroup title="Configurations">
+        {Object.entries(manifest.options ?? {} /* ?? TEMP_OPT */).map(([name, def]) => {
+            return <OptionDefRow opt={def} />;
+        })}
+        <TableRow
+            arrow={true}
+            label="More..."
+            icon={<TableRow.Icon source={findAssetId("WrenchIcon")} />}
+            disabled={!SettingsComponent}
+            onPress={() => {
+                hideSheet("PluginInfoActionSheet");
+                navigation.push("BUNNY_CUSTOM_PAGE", {
+                    title: plugin.name,
+                    render: SettingsComponent,
+                });
+            }}
+        />
+    </TableRowGroup>;
+}
+
+
 export default function PluginInfoActionSheet({ plugin, navigation }: PluginInfoActionSheetProps) {
     plugin.usePluginState();
 
     const pluginSettings = PluginManager.settings[plugin.id];
-    const SettingsComponent = plugin.getPluginSettingsComponent();
 
     return <ActionSheet>
         <ScrollView style={{ paddingVertical: 8 }} contentContainerStyle={{ gap: 18 }}>
@@ -38,21 +190,7 @@ export default function PluginInfoActionSheet({ plugin, navigation }: PluginInfo
                 <Codeblock selectable={true}>{String(PluginReporter.getError(plugin.id))}</Codeblock>
                 {/* <Button style={{ marginTop: 4 }} text="See more" onPress={() => {}} /> */}
             </Card>}
-            <TableRowGroup title="Configurations">
-                <TableRow
-                    arrow={true}
-                    label="More..."
-                    icon={<TableRow.Icon source={findAssetId("WrenchIcon")} />}
-                    disabled={!SettingsComponent}
-                    onPress={() => {
-                        hideSheet("PluginInfoActionSheet");
-                        navigation.push("BUNNY_CUSTOM_PAGE", {
-                            title: plugin.name,
-                            render: SettingsComponent,
-                        });
-                    }}
-                />
-            </TableRowGroup>
+            <OptionSection plugin={plugin} navigation={navigation} />
             <TableRowGroup title="Actions">
                 <Stack>
                     <ScrollView

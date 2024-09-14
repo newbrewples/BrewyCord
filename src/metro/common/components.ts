@@ -41,6 +41,7 @@ export const TableRowGroup = findProp("TableRowGroup") as t.TableRowGroup;
 export const TableRadioGroup = findProp("TableRadioGroup") as t.TableRadioGroup;
 export const TableRadioRow = findProp("TableRadioRow") as t.TableRadioRow;
 export const TableSwitchRow = findProp("TableSwitchRow") as t.TableSwitchRow;
+export const TableCheckboxRow = findProp("TableCheckboxRow") as t.TableCheckboxRow;
 
 export const TableSwitch = findSingular("FormSwitch");
 export const TableRadio = findSingular("FormRadio");
@@ -69,6 +70,7 @@ export const Avatar = findProp("default", "AvatarSizes", "getStatusSize");
 
 // Inputs
 export const TextInput = findSingular("TextInput") as t.TextInput;
+export const TextArea = findSingular("TextArea");
 
 // SegmentedControl
 export const SegmentedControl = findProp("SegmentedControl") as t.SegmentedControl;

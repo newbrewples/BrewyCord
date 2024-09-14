@@ -2,19 +2,6 @@ import { logger } from "@core/logger";
 import { BunnyManifest } from "@lib/addons/types";
 import { createStorage } from "@lib/api/storage";
 
-export interface PluginRepo {
-    [id: string]: {
-        version: string;
-
-        // For plugin developing convenience, plugins with this on will always get fetched
-        alwaysFetch?: boolean;
-    };
-}
-
-export interface PluginRepoStorage {
-    [repoUrl: string]: PluginRepo;
-}
-
 export interface PluginSettingsStorage {
     [pluginId: string]: {
         enabled: boolean;
@@ -33,12 +20,57 @@ export interface PluginTracesStorage {
 export interface BunnyPluginManifest extends BunnyManifest {
     main: string;
     hash: string;
+    options?: Record<string, OptionDefinition>;
 }
 
-export interface BunnyPluginManifestInternal extends BunnyPluginManifest {
-    readonly parentRepository: string;
-    readonly jsPath?: string;
+export type OptionDefinition = StringOptionDefinition | BooleanOptionDefinition | SelectOptionDefinition | RadioOptionDefinition | SliderOptionDefinition | SelectOptionDefinition;
+
+type OptionType = "string" | "boolean" | "select" | "radio" | "slider";
+
+interface OptionDefinitionBase {
+    type: OptionType;
+    label: string;
+    description?: string;
+    icon?: string | { uri: string };
 }
+
+interface StringOptionDefinition extends OptionDefinitionBase {
+    type: "string";
+    placeholder?: string;
+    defaults?: string;
+    textArea?: boolean;
+    regexValidation?: string;
+}
+
+interface BooleanOptionDefinition extends OptionDefinitionBase {
+    type: "boolean";
+    defaults?: boolean;
+}
+
+interface SelectOptionDefinition extends OptionDefinitionBase {
+    type: "select";
+    options: SelectRadioOptionRow[];
+}
+
+interface RadioOptionDefinition extends OptionDefinitionBase {
+    type: "radio";
+    options: SelectRadioOptionRow[];
+}
+
+interface SliderOptionDefinition extends OptionDefinitionBase {
+    type: "slider";
+    points: number[];
+    default?: number;
+}
+
+interface SelectRadioOptionRow {
+    label: string;
+    description?: string;
+    icon?: string | { uri: string };
+    value: string | number | boolean;
+    default?: boolean;
+}
+
 
 export interface PluginInstance {
     start?(): void | Promise<void>;
@@ -52,7 +84,7 @@ export interface PluginInstanceInternal extends PluginInstance {
 
 export interface BunnyPluginProperty {
     readonly logger: typeof logger;
-    readonly manifest: BunnyPluginManifestInternal;
+    readonly manifest: BunnyPluginManifest;
     createStorage<T extends object>(): ReturnType<typeof createStorage<T>>;
 }
 

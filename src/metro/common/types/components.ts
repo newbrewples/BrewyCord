@@ -177,6 +177,7 @@ interface TableRowBaseProps {
     arrow?: boolean;
     label: string | ReactNode;
     subLabel?: string | ReactNode;
+    variant?: LiteralUnion<"danger", string>
     icon?: JSX.Element | Falsey;
     disabled?: boolean;
     trailing?: ReactNode | React.ComponentType<any>;
@@ -223,9 +224,7 @@ interface TableRadioGroupProps {
 
 export type TableRadioGroup = FC<TableRadioGroupProps>;
 
-interface TableRadioRowProps {
-    icon: JSX.Element;
-    label: string;
+interface TableRadioRowProps extends TableRowBaseProps {
     value: string;
 }
 
@@ -237,3 +236,10 @@ interface TableSwitchRowProps extends TableRowBaseProps {
 }
 
 export type TableSwitchRow = FC<TableSwitchRowProps>;
+
+interface TableCheckboxRowProps extends TableRowBaseProps {
+    checked: boolean;
+    onPress: () => void;
+}
+
+export type TableCheckboxRow = FC<TableCheckboxRowProps>;
