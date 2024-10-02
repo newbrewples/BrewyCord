@@ -1,22 +1,22 @@
-# Bunny [![Discord](https://img.shields.io/discord/1196075698301968455?style=social&logo=discord&label=Pyoncord)](https://discord.gg/XjYgWXHb9Q)
-A mod for Discord's mobile apps, a fork of [Vendetta](https://github.com/vendetta-mod/Vendetta/).
+# BrewyCord [![Discord](https://img.shields.io/discord/1196075698301968455?style=social&logo=discord&label=Pyoncord)](https://discord.gg/XjYgWXHb9Q)
+A mod for Discord's mobile apps, a fork of [bunny](https://github.com/Pyoncord/bunny).
 
 ## Installing
 
 ### Android
 
-- **Root** with Xposed - [BunnyXposed](https://github.com/pyoncord/BunnyXposed/releases/latest)
-- **Non-root** - [BunnyManager](https://github.com/pyoncord/BunnyManager/releases/latest)
+- **Root** with Xposed - [BrewXposed](https://github.com/pyoncord/BunnyXposed/releases/latest)
+- **Non-root** - [BrewManager](https://github.com/pyoncord/BunnyManager/releases/latest)
 
 ### iOS
-- [**BunnyTweak**](https://github.com/pyoncord/BunnyTweak) - Get prebuilt rootful and rootless `.deb` files or the prepatched `.ipa `
+- [**BrewTweak**](https://github.com/pyoncord/BunnyTweak) - Get prebuilt rootful and rootless `.deb` files or the prepatched `.ipa `
 
 ## Building
-1. Install a Bunny loader with loader config support (any mentioned in the [Installing](#installing) section).
+1. Install a Brewy loader with loader config support (any mentioned in the [Installing](#installing) section).
 1. Go to Settings > General and enable Developer Settings.
 1. Clone the repo:
     ```
-    git clone https://github.com/pyoncord/Bunny
+    git clone https://github.com/newbrewples/BrewyCord
     ```
 1. Install dependencies:
     ```
@@ -32,3 +32,6 @@ A mod for Discord's mobile apps, a fork of [Vendetta](https://github.com/vendett
 1. Make your changes, rebuild, reload, go wild!
 
 Alternatively, you can directly *serve* the bundled code by running `pnpm serve`. `bunny.js` will be served on your local address under the port 4040. You will then insert `http://<local ip address>:4040/bunny.js` as a custom url and reload. Whenever you restart your mobile client, the script will rebuild the bundle as your client fetches it.
+
+
+DEEP APOLOGIES TO VENDETTA FOR THE LOW QUALITY MKDIFICATION!
